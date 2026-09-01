@@ -13,31 +13,31 @@ public class PantallaInicio extends JFrame {
 
         // Panel superior con imagen y título
         JPanel panelSuperior = new JPanel();
-        panelSuperior.setBackground(new Color(30, 60, 90)); // Azul oscuro tipo Stitch
-        panelSuperior.setLayout(new BorderLayout());
-
-        // Imagen decorativa
-        JLabel imagen = new JLabel();
-        ImageIcon icon = new ImageIcon("imagenes/stitch 1.png"); // Revisa que la ruta sea correcta
-        Image scaled = icon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH);
-        imagen.setIcon(new ImageIcon(scaled));
-        imagen.setHorizontalAlignment(SwingConstants.CENTER);
-        imagen.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        panelSuperior.add(imagen, BorderLayout.CENTER);
+        panelSuperior.setOpaque(false);
+        PanelConImagen fondo = new PanelConImagen("imagenes/fondoAhorcado.png");
+        fondo.setLayout(new BorderLayout());
+        setContentPane(fondo);
 
         // Título en la parte inferior del panel superior
-        JLabel titulo = new JLabel("AHORCADO DE STITCH", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial Black", Font.BOLD, 28));
-        titulo.setForeground(new Color(255, 230, 150)); // Amarillo claro para contraste
-        titulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
-        panelSuperior.add(titulo, BorderLayout.SOUTH);
+        JLabel titulo = new JLabel();
+
+        ImageIcon iconoLogo = new ImageIcon("imagenes/AhorcadoLOGO.png");
+        Image logoEscalado = iconoLogo.getImage().getScaledInstance( 250, 200, Image.SCALE_SMOOTH);
+        titulo.setIcon(new ImageIcon(logoEscalado));
+        titulo.setHorizontalAlignment(SwingConstants.CENTER);
+        titulo.setBorder(
+        BorderFactory.createEmptyBorder(10, 0, 15, 0));
+        panelSuperior.add(
+                titulo,
+                BorderLayout.CENTER
+            );
 
         add(panelSuperior, BorderLayout.NORTH);
 
         // Panel central con botones
         JPanel centro = new JPanel();
-        centro.setBackground(new Color(200, 230, 255)); // Azul suave
         centro.setLayout(new BoxLayout(centro, BoxLayout.Y_AXIS));
+        centro.setOpaque(false);
         centro.setBorder(BorderFactory.createEmptyBorder(30, 50, 40, 50));
 
         Font btnFont = new Font("Arial", Font.BOLD, 20);

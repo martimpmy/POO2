@@ -13,20 +13,26 @@ public class RegistroUsuario extends JFrame {
         setResizable(false);
         setLayout(new BorderLayout());
 
-        // Panel con fondo azul suave
+        // Fondo con imagen
+        PanelConImagen fondo = new PanelConImagen("imagenes/fondoLOGIN.png");
+        fondo.setLayout(new BorderLayout());
+        setContentPane(fondo);
+
+        // Panel principal sobre el fondo
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(200, 230, 255));
+        panel.setOpaque(false); // Hacemos el panel transparente
         panel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        // Título
-        JLabel titulo = new JLabel("Crear Nueva Cuenta");
-        titulo.setFont(new Font("Arial Black", Font.BOLD, 24));
-        titulo.setForeground(new Color(30, 60, 90));
-        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        panel.add(titulo);
-        panel.add(Box.createVerticalStrut(20));
+        // Logo en lugar del texto de título
+        ImageIcon logoIcon = new ImageIcon("imagenes/LOGOREGISTRO.png");
+        Image logoEscalado = logoIcon.getImage().getScaledInstance(190, 70, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(logoEscalado));
+        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(logoLabel);
+        panel.add(Box.createVerticalStrut(10));
+        
+        
 
         // Usuario
         JLabel lblUsuario = new JLabel("Usuario:");
