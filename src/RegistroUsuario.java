@@ -5,11 +5,7 @@ import java.util.Scanner;
 
 public class RegistroUsuario extends JFrame {
 
-    private PantallaInicio pantallaInicio;
-
     public RegistroUsuario(PantallaInicio pantallaInicio) {
-        this.pantallaInicio = pantallaInicio;
-
         setTitle("Registro de Usuario");
         setSize(400, 280);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

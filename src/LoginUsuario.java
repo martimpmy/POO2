@@ -5,11 +5,7 @@ import java.util.Scanner;
 
 public class LoginUsuario extends JFrame {
 
-    private PantallaInicio pantallaInicio;
-
     public LoginUsuario(PantallaInicio pantallaInicio) {
-        this.pantallaInicio = pantallaInicio;
-
         setTitle("Iniciar Sesión");
         setSize(400, 280);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
