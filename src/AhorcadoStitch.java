@@ -5,7 +5,7 @@ import java.util.*;
 
 public class AhorcadoStitch extends JFrame {
 
-    private final java.util.List<Palabra> palabras = new java.util.ArrayList<>(Arrays.asList(
+    private final java.util.List<Palabra> palabras = java.util.Arrays.asList(
         new Palabra("ohana", "Significa familia"),
         new Palabra("lilo", "Nombre de la nena hawaiana"),
         new Palabra("stitch", "Experimento alienígena azul"),
@@ -32,14 +32,9 @@ public class AhorcadoStitch extends JFrame {
         new Palabra("ukelele", "Instrumento que Lilo toca"),
         new Palabra("jumba", "El científico loco que creó a Stitch"),
         new Palabra("pleakley", "Alien con un solo ojo")
-    ));
+    );
 
-    private Palabra palabraActual;
-
-    private int errores = 0;
-    private final int MAX_ERRORES = 6;
-
-    private int puntaje = 0;
+    private Partida partida;
     private String nombreUsuario = "Jugador";
 
     private JLabel tituloLabel;
@@ -72,22 +67,33 @@ public class AhorcadoStitch extends JFrame {
 
     private void crearInterfaz() {
 
-        PanelConImagen fondo = new PanelConImagen("imagenes/fondoJUEGO.png");
+        PanelConImagen fondo =
+            new PanelConImagen("imagenes/fondoJUEGO.png");
+
         fondo.setLayout(new BorderLayout(20, 20));
         setContentPane(fondo);
 
-        JPanel panelCentral = new JPanel(new BorderLayout(20, 15)) {
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
+        JPanel panelCentral =
+            new JPanel(new BorderLayout(20, 15)) {
 
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setColor(new Color(255, 255, 255, 230));
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 35, 35);
-            }
-        };
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setColor(new Color(255, 255, 255, 230));
+                    g2.fillRoundRect(
+                        0, 0,
+                        getWidth(), getHeight(),
+                        35, 35
+                    );
+                }
+            };
 
         panelCentral.setOpaque(false);
-        panelCentral.setBorder(new EmptyBorder(25, 40, 25, 40));
+        panelCentral.setBorder(
+            new EmptyBorder(25, 40, 25, 40)
+        );
+
         fondo.add(panelCentral, BorderLayout.CENTER);
 
         crearPanelSuperior(panelCentral);
@@ -99,86 +105,207 @@ public class AhorcadoStitch extends JFrame {
 
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
+
         panelCentral.add(topPanel, BorderLayout.NORTH);
 
-        tituloLabel = new JLabel("¡No dejes que Stitch se enoje!");
-        tituloLabel.setFont(new Font("Papyrus", Font.BOLD, 30));
-        tituloLabel.setForeground(new Color(25, 25, 112));
-        tituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        topPanel.add(tituloLabel, BorderLayout.CENTER);
+        tituloLabel =
+            new JLabel("¡No dejes que Stitch se enoje!");
+
+        tituloLabel.setFont(
+            new Font("Papyrus", Font.BOLD, 30)
+        );
+
+        tituloLabel.setForeground(
+            new Color(25, 25, 112)
+        );
+
+        tituloLabel.setHorizontalAlignment(
+            SwingConstants.CENTER
+        );
+
+        topPanel.add(
+            tituloLabel,
+            BorderLayout.CENTER
+        );
 
         usuarioLabel = new JLabel();
-        usuarioLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        usuarioLabel.setForeground(new Color(50, 50, 50));
-        usuarioLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        usuarioLabel.setBorder(new EmptyBorder(0, 0, 10, 0));
-        topPanel.add(usuarioLabel, BorderLayout.EAST);
+
+        usuarioLabel.setFont(
+            new Font("Arial", Font.BOLD, 20)
+        );
+
+        usuarioLabel.setForeground(
+            new Color(50, 50, 50)
+        );
+
+        usuarioLabel.setHorizontalAlignment(
+            SwingConstants.RIGHT
+        );
+
+        usuarioLabel.setBorder(
+            new EmptyBorder(0, 0, 10, 0)
+        );
+
+        topPanel.add(
+            usuarioLabel,
+            BorderLayout.EAST
+        );
     }
 
     private void crearPanelCentral(JPanel panelCentral) {
 
-        JPanel centerPanel = new JPanel(new BorderLayout(20, 15));
+        JPanel centerPanel =
+            new JPanel(new BorderLayout(20, 15));
+
         centerPanel.setOpaque(false);
-        panelCentral.add(centerPanel, BorderLayout.CENTER);
+
+        panelCentral.add(
+            centerPanel,
+            BorderLayout.CENTER
+        );
 
         JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+
+        leftPanel.setLayout(
+            new BoxLayout(
+                leftPanel,
+                BoxLayout.Y_AXIS
+            )
+        );
+
         leftPanel.setOpaque(false);
-        leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        leftPanel.setBorder(
+            new EmptyBorder(10, 10, 10, 10)
+        );
 
         palabraLabel = new JLabel();
-        palabraLabel.setFont(new Font("Monospaced", Font.BOLD, 54));
-        palabraLabel.setForeground(new Color(25, 25, 112));
-        palabraLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        palabraLabel.setBorder(new EmptyBorder(0, 0, 40, 0));
+
+        palabraLabel.setFont(
+            new Font("Monospaced", Font.BOLD, 54)
+        );
+
+        palabraLabel.setForeground(
+            new Color(25, 25, 112)
+        );
+
+        palabraLabel.setAlignmentX(
+            Component.CENTER_ALIGNMENT
+        );
+
+        palabraLabel.setBorder(
+            new EmptyBorder(0, 0, 40, 0)
+        );
+
         leftPanel.add(palabraLabel);
 
         pistaLabel = new JLabel("Pista: ");
-        pistaLabel.setFont(new Font("Arial", Font.ITALIC, 26));
-        pistaLabel.setForeground(new Color(0, 100, 0));
-        pistaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        pistaLabel.setFont(
+            new Font("Arial", Font.ITALIC, 26)
+        );
+
+        pistaLabel.setForeground(
+            new Color(0, 100, 0)
+        );
+
+        pistaLabel.setAlignmentX(
+            Component.CENTER_ALIGNMENT
+        );
+
         leftPanel.add(pistaLabel);
 
-        leftPanel.add(Box.createVerticalStrut(20));
+        leftPanel.add(
+            Box.createVerticalStrut(20)
+        );
 
-        contadorLabel = new JLabel("Errores: 0 / " + MAX_ERRORES);
-        contadorLabel.setFont(new Font("Arial", Font.BOLD, 28));
-        contadorLabel.setForeground(new Color(178, 34, 34));
-        contadorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        contadorLabel =
+            new JLabel("Errores: 0 / 6");
+
+        contadorLabel.setFont(
+            new Font("Arial", Font.BOLD, 28)
+        );
+
+        contadorLabel.setForeground(
+            new Color(178, 34, 34)
+        );
+
+        contadorLabel.setAlignmentX(
+            Component.CENTER_ALIGNMENT
+        );
+
         leftPanel.add(contadorLabel);
 
-        centerPanel.add(leftPanel, BorderLayout.WEST);
+        centerPanel.add(
+            leftPanel,
+            BorderLayout.WEST
+        );
 
         imagenLabel = new JLabel();
-        imagenLabel.setPreferredSize(new Dimension(320, 320));
-        imagenLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        imagenLabel.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(30, 144, 255), 6, true),
-            BorderFactory.createEmptyBorder(20, 20, 20, 20)
-        ));
+
+        imagenLabel.setPreferredSize(
+            new Dimension(320, 320)
+        );
+
+        imagenLabel.setHorizontalAlignment(
+            SwingConstants.CENTER
+        );
+
+        imagenLabel.setBorder(
+            BorderFactory.createCompoundBorder(
+                new LineBorder(
+                    new Color(30, 144, 255),
+                    6,
+                    true
+                ),
+                BorderFactory.createEmptyBorder(
+                    20, 20, 20, 20
+                )
+            )
+        );
+
         imagenLabel.setOpaque(true);
         imagenLabel.setBackground(Color.WHITE);
 
-        centerPanel.add(imagenLabel, BorderLayout.EAST);
+        centerPanel.add(
+            imagenLabel,
+            BorderLayout.EAST
+        );
     }
 
     private void crearPanelLetras(PanelConImagen fondo) {
 
-        letrasPanel = new JPanel(new GridLayout(3, 9, 14, 14));
-        letrasPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
-        letrasPanel.setBackground(new Color(240, 248, 255));
-        fondo.add(letrasPanel, BorderLayout.SOUTH);
+        letrasPanel =
+            new JPanel(
+                new GridLayout(3, 9, 14, 14)
+            );
+
+        letrasPanel.setBorder(
+            new EmptyBorder(20, 40, 20, 40)
+        );
+
+        letrasPanel.setBackground(
+            new Color(240, 248, 255)
+        );
+
+        fondo.add(
+            letrasPanel,
+            BorderLayout.SOUTH
+        );
 
         for (char letra = 'A'; letra <= 'Z'; letra++) {
 
-            final char letraFinal = letra;  // ERROR 1: Debe ser final
+            final char letraFinal = letra;
 
-            JButton boton = new JButton(String.valueOf(letraFinal));
+            JButton boton =
+                new JButton(String.valueOf(letra));
+
             configurarBoton(boton);
 
             boton.addActionListener(e -> {
                 boton.setEnabled(false);
                 boton.setBackground(Color.GRAY);
+
                 procesarLetra(letraFinal);
             });
 
@@ -188,115 +315,183 @@ public class AhorcadoStitch extends JFrame {
 
     private void configurarBoton(JButton boton) {
 
-        boton.setFont(new Font("Arial", Font.BOLD, 28));
+        boton.setFont(
+            new Font("Arial", Font.BOLD, 28)
+        );
+
         boton.setFocusPainted(false);
-        boton.setBackground(new Color(30, 144, 255));
+
+        boton.setBackground(
+            new Color(30, 144, 255)
+        );
+
         boton.setForeground(Color.WHITE);
-        boton.setBorder(BorderFactory.createLineBorder(
-            new Color(0, 104, 179), 3, true
-        ));
-        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        boton.setBorder(
+            BorderFactory.createLineBorder(
+                new Color(0, 104, 179),
+                3,
+                true
+            )
+        );
 
-            @Override  // ERROR 2: Falta @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if (boton.isEnabled()) {
-                    boton.setBackground(new Color(0, 104, 179));
+        boton.setCursor(
+            new Cursor(Cursor.HAND_CURSOR)
+        );
+
+        boton.addMouseListener(
+            new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseEntered(
+                    java.awt.event.MouseEvent evt) {
+
+                    if (boton.isEnabled()) {
+                        boton.setBackground(
+                            new Color(0, 104, 179)
+                        );
+                    }
+                }
+
+                @Override
+                public void mouseExited(
+                    java.awt.event.MouseEvent evt) {
+
+                    if (boton.isEnabled()) {
+                        boton.setBackground(
+                            new Color(30, 144, 255)
+                        );
+                    }
                 }
             }
-
-            @Override  // ERROR 3: Falta @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                if (boton.isEnabled()) {
-                    boton.setBackground(new Color(30, 144, 255));
-                }
-            }
-        });
+        );
     }
 
     private void nuevaPalabra() {
 
-        int indice = new Random().nextInt(palabras.size());
-        palabraActual = palabras.get(indice);
+        int indice =
+            new Random().nextInt(palabras.size());
 
-        errores = 0;
+        partida =
+            new Partida(palabras.get(indice));
 
         actualizarPalabra();
         actualizarImagen();
 
-        contadorLabel.setText("Errores: 0 / " + MAX_ERRORES);
-        pistaLabel.setText("Pista: " + palabraActual.getPista());
+        contadorLabel.setText(
+            "Errores: 0 / " +
+            partida.getMaxErrores()
+        );
+
+        pistaLabel.setText(
+            "Pista: " +
+            partida.getPalabra().getPista()
+        );
 
         habilitarBotones();
     }
 
-    private void actualizarPalabra() {
-        palabraLabel.setText(palabraActual.mostrar());
-    }
-
     private void procesarLetra(char letra) {
 
-        if (palabraActual.contieneLetra(letra)) {
-            palabraActual.agregarLetra(letra);
-        } else {
-            errores++;
-        }
+        partida.procesarLetra(letra);
 
         actualizarImagen();
-        contadorLabel.setText("Errores: " + errores + " / " + MAX_ERRORES);
+
+        contadorLabel.setText(
+            "Errores: " +
+            partida.getErrores() +
+            " / " +
+            partida.getMaxErrores()
+        );
+
         actualizarPalabra();
 
         chequearFinJuego();
+    }
+
+    private void actualizarPalabra() {
+
+        palabraLabel.setText(
+            partida.getPalabra().mostrar()
+        );
     }
 
     private void actualizarImagen() {
 
         String ruta;
 
-        if (errores >= MAX_ERRORES) {
+        if (partida.perdio()) {
+
             ruta = "imagenes/stitchroj.png";
-        } else if (palabraActual.estaCompleta()) {
+
+        } else if (partida.gano()) {
+
             ruta = "imagenes/stitchverde.png";
+
         } else {
-            int imgNum = errores == 0 ? 1 : errores;
-            ruta = "imagenes/stitch" + imgNum + ".jpg";
+
+            int imgNum =
+                partida.getErrores() == 0
+                    ? 1
+                    : partida.getErrores();
+
+            ruta =
+                "imagenes/stitch" +
+                imgNum +
+                ".jpg";
         }
 
-        ImageIcon icon = new ImageIcon(ruta);
+        ImageIcon icon =
+            new ImageIcon(ruta);
 
         if (icon.getIconWidth() <= 0) {
-            imagenLabel.setText("(Imagen no encontrada)");
+
+            imagenLabel.setText(
+                "(Imagen no encontrada)"
+            );
+
             imagenLabel.setIcon(null);
+
             return;
         }
 
-        Image imagen = icon.getImage().getScaledInstance(
-            320, 320, Image.SCALE_SMOOTH
+        Image imagen =
+            icon.getImage().getScaledInstance(
+                320,
+                320,
+                Image.SCALE_SMOOTH
+            );
+
+        imagenLabel.setIcon(
+            new ImageIcon(imagen)
         );
 
-        imagenLabel.setIcon(new ImageIcon(imagen));
         imagenLabel.setText(null);
     }
 
     private void chequearFinJuego() {
 
-        if (palabraActual.estaCompleta()) {
+        if (partida.gano()) {
 
-            puntaje += 10;
+            partida.actualizarPuntaje();
             actualizarUsuarioYPuntaje();
 
-            ImageIcon icono = new ImageIcon(
-                "imagenes/stitchcontento.png"
-            );
+            ImageIcon icono =
+                new ImageIcon(
+                    "imagenes/stitchcontento.png"
+                );
 
-            Image imagenEscalada = icono.getImage().getScaledInstance(
-                120, 120, Image.SCALE_SMOOTH
-            );
+            Image imagenEscalada =
+                icono.getImage().getScaledInstance(
+                    120,
+                    120,
+                    Image.SCALE_SMOOTH
+                );
 
             JOptionPane.showMessageDialog(
                 this,
-                "¡Ganaste! La palabra era: " + palabraActual.getPalabra(),
+                "¡Ganaste! La palabra era: " +
+                    partida.getPalabra().getPalabra(),
                 "¡Bien hecho!",
                 JOptionPane.INFORMATION_MESSAGE,
                 new ImageIcon(imagenEscalada)
@@ -304,22 +499,27 @@ public class AhorcadoStitch extends JFrame {
 
             nuevaPalabra();
 
-        } else if (errores >= MAX_ERRORES) {
+        } else if (partida.perdio()) {
 
-            puntaje = Math.max(0, puntaje - 5);
+            partida.actualizarPuntaje();
             actualizarUsuarioYPuntaje();
 
-            ImageIcon icono = new ImageIcon(
-                "imagenes/stitchenojao.png"
-            );
+            ImageIcon icono =
+                new ImageIcon(
+                    "imagenes/stitchenojao.png"
+                );
 
-            Image imagenEscalada = icono.getImage().getScaledInstance(
-                150, 150, Image.SCALE_SMOOTH
-            );
+            Image imagenEscalada =
+                icono.getImage().getScaledInstance(
+                    150,
+                    150,
+                    Image.SCALE_SMOOTH
+                );
 
             JOptionPane.showMessageDialog(
                 this,
-                "¡Perdiste! La palabra era: " + palabraActual.getPalabra(),
+                "¡Perdiste! La palabra era: " +
+                    partida.getPalabra().getPalabra(),
                 "Stitch está enojado :(",
                 JOptionPane.ERROR_MESSAGE,
                 new ImageIcon(imagenEscalada)
@@ -331,24 +531,35 @@ public class AhorcadoStitch extends JFrame {
 
     private void habilitarBotones() {
 
-        for (Component componente : letrasPanel.getComponents()) {
+        for (Component componente :
+                letrasPanel.getComponents()) {
 
             if (componente instanceof JButton) {
-                JButton boton = (JButton) componente;
+
+                JButton boton =
+                    (JButton) componente;
 
                 boton.setEnabled(true);
-                boton.setBackground(new Color(30, 144, 255));
-                boton.setForeground(Color.WHITE);  // ERROR 4: Restaurar color de texto
+
+                boton.setBackground(
+                    new Color(30, 144, 255)
+                );
+
+                boton.setForeground(Color.WHITE);
             }
         }
     }
 
     private void actualizarUsuarioYPuntaje() {
+
         usuarioLabel.setText(
-            "<html><b>Usuario:</b> " + nombreUsuario +
-            " &nbsp;&nbsp;&nbsp; <b>Puntaje:</b> " + puntaje +
+            "<html><b>Usuario:</b> " +
+            nombreUsuario +
+            " &nbsp;&nbsp;&nbsp; " +
+            "<b>Puntaje:</b> " +
+            partida.getPuntaje() +
             "</html>"
         );
     }
-
+   
 }
