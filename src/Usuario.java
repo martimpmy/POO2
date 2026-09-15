@@ -1,4 +1,5 @@
 public class Usuario {
+
     private String nombre;
     private String contraseña;
     private int puntaje;
@@ -22,6 +23,10 @@ public class Usuario {
     }
 
     public void sumarPuntos(int puntos) {
-        this.puntaje += puntos;
+        puntaje += puntos;
+
+        if (puntaje < 0) {
+            puntaje = 0;
+        }
     }
 }

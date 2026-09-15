@@ -35,7 +35,7 @@ public class AhorcadoStitch extends JFrame {
     );
 
     private Partida partida;
-    private String nombreUsuario = "Jugador";
+    private Usuario usuario;
 
     private JLabel tituloLabel;
     private JLabel usuarioLabel;
@@ -45,17 +45,17 @@ public class AhorcadoStitch extends JFrame {
     private JLabel pistaLabel;
     private JPanel letrasPanel;
 
-    public AhorcadoStitch(String usuario) {
-        nombreUsuario = usuario;
+    public AhorcadoStitch(Usuario usuario) {
+    this.usuario = usuario; //Cambios GRASP *2da entrega
 
-        configurarVentana();
-        crearInterfaz();
+    configurarVentana();
+    crearInterfaz();
 
-        nuevaPalabra();
-        actualizarUsuarioYPuntaje();
+    nuevaPalabra();
+    actualizarUsuarioYPuntaje();
 
-        setVisible(true);
-    }
+    setVisible(true);
+}
 
     private void configurarVentana() {
         setTitle("Ahorcado de Stitch");
@@ -471,63 +471,59 @@ public class AhorcadoStitch extends JFrame {
 
     private void chequearFinJuego() {
 
-        if (partida.gano()) {
+    if (partida.gano()) {
 
-            partida.actualizarPuntaje();
-            actualizarUsuarioYPuntaje();
+        usuario.sumarPuntos(10);
+        actualizarUsuarioYPuntaje();
 
-            ImageIcon icono =
-                new ImageIcon(
-                    "imagenes/stitchcontento.png"
-                );
+        ImageIcon icono =
+            new ImageIcon("imagenes/stitchcontento.png");
 
-            Image imagenEscalada =
-                icono.getImage().getScaledInstance(
-                    120,
-                    120,
-                    Image.SCALE_SMOOTH
-                );
-
-            JOptionPane.showMessageDialog(
-                this,
-                "¡Ganaste! La palabra era: " +
-                    partida.getPalabra().getPalabra(),
-                "¡Bien hecho!",
-                JOptionPane.INFORMATION_MESSAGE,
-                new ImageIcon(imagenEscalada)
+        Image imagenEscalada =
+            icono.getImage().getScaledInstance(
+                120,
+                120,
+                Image.SCALE_SMOOTH
             );
 
-            nuevaPalabra();
+        JOptionPane.showMessageDialog(
+            this,
+            "¡Ganaste! La palabra era: " +
+            partida.getPalabra().getPalabra(),
+            "¡Bien hecho!",
+            JOptionPane.INFORMATION_MESSAGE,
+            new ImageIcon(imagenEscalada)
+        );
 
-        } else if (partida.perdio()) {
+        nuevaPalabra();
 
-            partida.actualizarPuntaje();
-            actualizarUsuarioYPuntaje();
+    } else if (partida.perdio()) {
 
-            ImageIcon icono =
-                new ImageIcon(
-                    "imagenes/stitchenojao.png"
-                );
+        usuario.sumarPuntos(-5);
+        actualizarUsuarioYPuntaje();
 
-            Image imagenEscalada =
-                icono.getImage().getScaledInstance(
-                    150,
-                    150,
-                    Image.SCALE_SMOOTH
-                );
+        ImageIcon icono =
+            new ImageIcon("imagenes/stitchenojao.png");
 
-            JOptionPane.showMessageDialog(
-                this,
-                "¡Perdiste! La palabra era: " +
-                    partida.getPalabra().getPalabra(),
-                "Stitch está enojado :(",
-                JOptionPane.ERROR_MESSAGE,
-                new ImageIcon(imagenEscalada)
+        Image imagenEscalada =
+            icono.getImage().getScaledInstance(
+                150,
+                150,
+                Image.SCALE_SMOOTH
             );
 
-            nuevaPalabra();
-        }
+        JOptionPane.showMessageDialog(
+            this,
+            "¡Perdiste! La palabra era: " +
+            partida.getPalabra().getPalabra(),
+            "Stitch está enojado :(",
+            JOptionPane.ERROR_MESSAGE,
+            new ImageIcon(imagenEscalada)
+        );
+
+        nuevaPalabra();
     }
+}
 
     private void habilitarBotones() {
 
@@ -550,16 +546,16 @@ public class AhorcadoStitch extends JFrame {
         }
     }
 
-    private void actualizarUsuarioYPuntaje() {
+    private void actualizarUsuarioYPuntaje() { //Cambios GRASP *2da entrega
 
-        usuarioLabel.setText(
-            "<html><b>Usuario:</b> " +
-            nombreUsuario +
-            " &nbsp;&nbsp;&nbsp; " +
-            "<b>Puntaje:</b> " +
-            partida.getPuntaje() +
-            "</html>"
-        );
-    }
+    usuarioLabel.setText(
+        "<html><b>Usuario:</b> " +
+        usuario.getNombre() +
+        " &nbsp;&nbsp;&nbsp; " +
+        "<b>Puntaje:</b> " +
+        usuario.getPuntaje() +
+        "</html>"
+    );
+}
    
 }

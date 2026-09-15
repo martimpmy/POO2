@@ -77,22 +77,38 @@ public class LoginUsuario extends JFrame {
         add(panel, BorderLayout.CENTER);
 
         btnIngresar.addActionListener(e -> {
-            String usuario = txtUsuario.getText().trim();
+
+            String nombre = txtUsuario.getText().trim();
             String contraseña = new String(txtPassword.getPassword()).trim();
 
-            if (usuario.isEmpty() || contraseña.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Completa todos los campos.");
+            if (nombre.isEmpty() || contraseña.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Completa todos los campos."
+                );
                 return;
             }
 
-            if (validarUsuario(usuario, contraseña)) {
-                JOptionPane.showMessageDialog(this, "¡Bienvenido " + usuario + "!");
+            Usuario usuario = GestorUsuario.login(nombre, contraseña);
+
+            if (usuario != null) {
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    "¡Bienvenido " + usuario.getNombre() + "!"
+                );
+
                 new AhorcadoStitch(usuario);
                 this.dispose();
+
             } else {
-                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Usuario o contraseña incorrectos."
+                );
             }
-        });
+});
 
         btnCancelar.addActionListener(e -> {
             this.dispose();
@@ -100,23 +116,5 @@ public class LoginUsuario extends JFrame {
         });
 
         setVisible(true);
-    }
-
-    private boolean validarUsuario(String usuario, String contraseña) {
-        File archivo = new File("usuarios.txt");
-        if (!archivo.exists()) return false;
-
-        try (Scanner sc = new Scanner(archivo)) {
-            while (sc.hasNextLine()) {
-                String linea = sc.nextLine();
-                String[] datos = linea.split(";");
-                if (datos.length >= 2 && datos[0].equals(usuario) && datos[1].equals(contraseña)) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 }
