@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.util.Scanner;
 
 public class LoginUsuario extends JFrame {
 
