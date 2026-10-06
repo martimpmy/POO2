@@ -1,13 +1,12 @@
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.util.*;
 
 public class AhorcadoStitch extends JFrame {
 
     private Partida partida;
     private Usuario usuario;
-    private BancoPalabras bancoPalabras;
+    private FuentePalabras fuentePalabras;
 
     private JLabel tituloLabel;
     private JLabel usuarioLabel;
@@ -20,7 +19,7 @@ public class AhorcadoStitch extends JFrame {
     public AhorcadoStitch(Usuario usuario) {
 
     this.usuario = usuario;
-    this.bancoPalabras = new BancoPalabras();
+    this.fuentePalabras = new BancoPalabras();
 
     configurarVentana();
     crearInterfaz();
@@ -343,7 +342,7 @@ public class AhorcadoStitch extends JFrame {
 
     private void nuevaPalabra() {
 
-    Palabra palabra = bancoPalabras.obtenerPalabraAleatoria();
+    Palabra palabra = fuentePalabras.obtenerPalabraAleatoria();
 
     partida = new Partida(palabra);
 

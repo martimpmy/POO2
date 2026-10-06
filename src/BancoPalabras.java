@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class BancoPalabras {
+public class BancoPalabras implements FuentePalabras {
 
     private final List<Palabra> palabras = Arrays.asList(
         new Palabra("ohana", "Significa familia"),
@@ -41,6 +41,7 @@ public class BancoPalabras {
 
     private final Random random = new Random();
 
+    @Override
     public Palabra obtenerPalabraAleatoria() {
         int indice = random.nextInt(palabras.size());
         return palabras.get(indice);
