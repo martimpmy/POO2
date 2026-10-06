@@ -4,3 +4,4 @@ simon;simon;0
 bcosta;123;0
 usuario;123;0
 user;123;0
+prettycloudddd;1234;0
