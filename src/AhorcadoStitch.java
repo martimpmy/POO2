@@ -5,37 +5,9 @@ import java.util.*;
 
 public class AhorcadoStitch extends JFrame {
 
-    private final java.util.List<Palabra> palabras = java.util.Arrays.asList(
-        new Palabra("ohana", "Significa familia"),
-        new Palabra("lilo", "Nombre de la nena hawaiana"),
-        new Palabra("stitch", "Experimento alienígena azul"),
-        new Palabra("nani", "Hermana mayor de Lilo"),
-        new Palabra("aloha", "Hola y Chau en hawaiano"),
-        new Palabra("hawai", "Hogar de Lilo"),
-        new Palabra("surf", "Deporte que practica Nani"),
-        new Palabra("tabla", "Lo que utilizan para surfear"),
-        new Palabra("experimento", "Stitch fue un"),
-        new Palabra("familia", "Nunca te abandona"),
-        new Palabra("alien", "Seres de otro planeta"),
-        new Palabra("extraterrestre", "Muchos personajes lo son"),
-        new Palabra("adopcion", "Stitch encuentra su lugar en la Tierra gracias a este acto de amor."),
-        new Palabra("hermanas", "Lilo y Nani"),
-        new Palabra("perro", "Lo que Lilo cree haber adoptado"),
-        new Palabra("nave", "Stitch viaja a la Tierra en una de estas"),
-        new Palabra("mision", "Cada alien en la historia tiene una"),
-        new Palabra("amor", "Lo que transforma a Stitch de destructor a ser parte de una familia."),
-        new Palabra("playa", "Donde todos surfean"),
-        new Palabra("oceano", "Gran azul que rodea Hawaii"),
-        new Palabra("casa", "El lugar que intentan salvar Lilo y Nani"),
-        new Palabra("hula", "Baile típico que Lilo ama practicar"),
-        new Palabra("elvis", "El ídolo musical favorito de Lilo"),
-        new Palabra("ukelele", "Instrumento que Lilo toca"),
-        new Palabra("jumba", "El científico loco que creó a Stitch"),
-        new Palabra("pleakley", "Alien con un solo ojo")
-    );
-
     private Partida partida;
     private Usuario usuario;
+    private BancoPalabras bancoPalabras;
 
     private JLabel tituloLabel;
     private JLabel usuarioLabel;
@@ -46,7 +18,9 @@ public class AhorcadoStitch extends JFrame {
     private JPanel letrasPanel;
 
     public AhorcadoStitch(Usuario usuario) {
-    this.usuario = usuario; //Cambios GRASP *2da entrega
+
+    this.usuario = usuario;
+    this.bancoPalabras = new BancoPalabras();
 
     configurarVentana();
     crearInterfaz();
@@ -369,27 +343,25 @@ public class AhorcadoStitch extends JFrame {
 
     private void nuevaPalabra() {
 
-        int indice =
-            new Random().nextInt(palabras.size());
+    Palabra palabra = bancoPalabras.obtenerPalabraAleatoria();
 
-        partida =
-            new Partida(palabras.get(indice));
+    partida = new Partida(palabra);
 
-        actualizarPalabra();
-        actualizarImagen();
+    actualizarPalabra();
+    actualizarImagen();
 
-        contadorLabel.setText(
-            "Errores: 0 / " +
-            partida.getMaxErrores()
-        );
+    contadorLabel.setText(
+        "Errores: 0 / " +
+        partida.getMaxErrores()
+    );
 
-        pistaLabel.setText(
-            "Pista: " +
-            partida.getPalabra().getPista()
-        );
+    pistaLabel.setText(
+        "Pista: " +
+        partida.getPalabra().getPista()
+    );
 
-        habilitarBotones();
-    }
+    habilitarBotones();
+}
 
     private void procesarLetra(char letra) {
 
