@@ -1,11 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.util.Scanner;
 
 public class RegistroUsuario extends JFrame {
 
-    public RegistroUsuario(PantallaInicio pantallaInicio) {
+    public RegistroUsuario(PantallaInicio pantallaInicio, GestorUsuario gestor) {
         setTitle("Registro de Usuario");
         setSize(400, 280);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -90,13 +88,17 @@ public class RegistroUsuario extends JFrame {
                 return;
             }
 
-            if (existeUsuario(usuario)) {
-                JOptionPane.showMessageDialog(this, "Ese usuario ya existe.");
-            } else {
-                guardarUsuario(usuario, contraseña);
-                JOptionPane.showMessageDialog(this, "¡Registro exitoso!");
-                this.dispose();
-                pantallaInicio.setVisible(true);
+            try {
+                if (gestor.registrarUsuario(usuario, contraseña)) {
+                    JOptionPane.showMessageDialog(this, "¡Registro exitoso!");
+                    this.dispose();
+                    pantallaInicio.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Ese usuario ya existe.");
+                }
+            } catch (IllegalArgumentException | AccesoUsuariosException error) {
+                JOptionPane.showMessageDialog(this, error.getMessage(),
+                        "No se pudo registrar", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -108,29 +110,4 @@ public class RegistroUsuario extends JFrame {
         setVisible(true);
     }
 
-    private boolean existeUsuario(String usuario) {
-        File archivo = new File("usuarios.txt");
-        if (!archivo.exists()) return false;
-
-        try (Scanner sc = new Scanner(archivo)) {
-            while (sc.hasNextLine()) {
-                String linea = sc.nextLine();
-                String[] datos = linea.split(";");
-                if (datos.length >= 1 && datos[0].equals(usuario)) {
-                    return true;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private void guardarUsuario(String usuario, String contraseña) {
-        try (PrintWriter out = new PrintWriter(new FileWriter("usuarios.txt", true))) {
-            out.println(usuario + ";" + contraseña + ";0");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

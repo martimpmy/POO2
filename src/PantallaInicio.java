@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class PantallaInicio extends JFrame {
 
-    public PantallaInicio() {
+    public PantallaInicio(GestorUsuario gestor, java.util.function.Consumer<Usuario> abrirJuego) {
         setTitle("Ahorcado de Stitch - Bienvenido");
         setSize(520, 420);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -83,12 +83,12 @@ public class PantallaInicio extends JFrame {
         });
 
         btnRegistro.addActionListener(e -> {
-            new RegistroUsuario(this);
+            new RegistroUsuario(this, gestor);
             setVisible(false);
         });
 
         btnLogin.addActionListener(e -> {
-            new LoginUsuario(this);
+            new LoginUsuario(this, gestor, abrirJuego);
             setVisible(false);
         });
 

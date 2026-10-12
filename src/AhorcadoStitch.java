@@ -4,9 +4,7 @@ import java.awt.*;
 
 public class AhorcadoStitch extends JFrame {
 
-    private Partida partida;
-    private Usuario usuario;
-    private FuentePalabras fuentePalabras;
+    private final ControladorJuego controlador;
 
     private JLabel tituloLabel;
     private JLabel usuarioLabel;
@@ -16,10 +14,9 @@ public class AhorcadoStitch extends JFrame {
     private JLabel pistaLabel;
     private JPanel letrasPanel;
 
-    public AhorcadoStitch(Usuario usuario) {
+    public AhorcadoStitch(ControladorJuego controlador) {
 
-    this.usuario = usuario;
-    this.fuentePalabras = new BancoPalabras();
+    this.controlador = java.util.Objects.requireNonNull(controlador);
 
     configurarVentana();
     crearInterfaz();
@@ -41,7 +38,7 @@ public class AhorcadoStitch extends JFrame {
     private void crearInterfaz() {
 
         PanelConImagen fondo =
-            new PanelConImagen("imagenes/fondoJUEGO.png");
+            new PanelConImagen("imagenes/FondoJUEGO.png");
 
         fondo.setLayout(new BorderLayout(20, 20));
         setContentPane(fondo);
@@ -342,21 +339,19 @@ public class AhorcadoStitch extends JFrame {
 
     private void nuevaPalabra() {
 
-    Palabra palabra = fuentePalabras.obtenerPalabraAleatoria();
-
-    partida = new Partida(palabra);
+    controlador.iniciarRonda();
 
     actualizarPalabra();
     actualizarImagen();
 
     contadorLabel.setText(
         "Errores: 0 / " +
-        partida.getMaxErrores()
+        controlador.getMaxErrores()
     );
 
     pistaLabel.setText(
         "Pista: " +
-        partida.getPalabra().getPista()
+        controlador.getPista()
     );
 
     habilitarBotones();
@@ -364,15 +359,15 @@ public class AhorcadoStitch extends JFrame {
 
     private void procesarLetra(char letra) {
 
-        partida.procesarLetra(letra);
+        controlador.procesarLetra(letra);
 
         actualizarImagen();
 
         contadorLabel.setText(
             "Errores: " +
-            partida.getErrores() +
+            controlador.getErrores() +
             " / " +
-            partida.getMaxErrores()
+            controlador.getMaxErrores()
         );
 
         actualizarPalabra();
@@ -383,7 +378,7 @@ public class AhorcadoStitch extends JFrame {
     private void actualizarPalabra() {
 
         palabraLabel.setText(
-            partida.getPalabra().mostrar()
+            controlador.mostrarPalabra()
         );
     }
 
@@ -391,20 +386,20 @@ public class AhorcadoStitch extends JFrame {
 
         String ruta;
 
-        if (partida.perdio()) {
+        if (controlador.perdio()) {
 
-            ruta = "imagenes/stitchroj.png";
+            ruta = "imagenes/stitchrojo.jpg";
 
-        } else if (partida.gano()) {
+        } else if (controlador.gano()) {
 
             ruta = "imagenes/stitchverde.png";
 
         } else {
 
             int imgNum =
-                partida.getErrores() == 0
+                controlador.getErrores() == 0
                     ? 1
-                    : partida.getErrores();
+                    : controlador.getErrores();
 
             ruta =
                 "imagenes/stitch" +
@@ -442,13 +437,12 @@ public class AhorcadoStitch extends JFrame {
 
     private void chequearFinJuego() {
 
-    if (partida.gano()) {
+    if (controlador.gano()) {
 
-        usuario.sumarPuntos(10);
         actualizarUsuarioYPuntaje();
 
         ImageIcon icono =
-            new ImageIcon("imagenes/stitchcontento.png");
+            new ImageIcon("imagenes/stitchverde.png");
 
         Image imagenEscalada =
             icono.getImage().getScaledInstance(
@@ -460,7 +454,7 @@ public class AhorcadoStitch extends JFrame {
         JOptionPane.showMessageDialog(
             this,
             "¡Ganaste! La palabra era: " +
-            partida.getPalabra().getPalabra(),
+            controlador.getTextoPalabra(),
             "¡Bien hecho!",
             JOptionPane.INFORMATION_MESSAGE,
             new ImageIcon(imagenEscalada)
@@ -468,13 +462,12 @@ public class AhorcadoStitch extends JFrame {
 
         nuevaPalabra();
 
-    } else if (partida.perdio()) {
+    } else if (controlador.perdio()) {
 
-        usuario.sumarPuntos(-5);
         actualizarUsuarioYPuntaje();
 
         ImageIcon icono =
-            new ImageIcon("imagenes/stitchenojao.png");
+            new ImageIcon("imagenes/stitchrojo.jpg");
 
         Image imagenEscalada =
             icono.getImage().getScaledInstance(
@@ -486,7 +479,7 @@ public class AhorcadoStitch extends JFrame {
         JOptionPane.showMessageDialog(
             this,
             "¡Perdiste! La palabra era: " +
-            partida.getPalabra().getPalabra(),
+            controlador.getTextoPalabra(),
             "Stitch está enojado :(",
             JOptionPane.ERROR_MESSAGE,
             new ImageIcon(imagenEscalada)
@@ -521,10 +514,10 @@ public class AhorcadoStitch extends JFrame {
 
     usuarioLabel.setText(
         "<html><b>Usuario:</b> " +
-        usuario.getNombre() +
+        controlador.getNombreUsuario() +
         " &nbsp;&nbsp;&nbsp; " +
         "<b>Puntaje:</b> " +
-        usuario.getPuntaje() +
+        controlador.getPuntaje() +
         "</html>"
     );
 }

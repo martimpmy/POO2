@@ -1,49 +1,43 @@
-import java.io.*;
+import java.util.Objects;
 
 public class GestorUsuario {
-    private static final String ARCHIVO = "usuarios.txt";
+    private final RepositorioUsuarios repositorio;
 
-    public static boolean registrarUsuario(String nombre, String contraseña) {
-        if (usuarioExiste(nombre)) return false;
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(ARCHIVO, true))) {
-            writer.write(nombre + "," + contraseña + ",0"); // nombre,clave,puntaje
-            writer.newLine();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+    public GestorUsuario(RepositorioUsuarios repositorio) {
+        this.repositorio = Objects.requireNonNull(repositorio);
     }
 
-    public static Usuario login(String nombre, String contraseña) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO))) {
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                String[] partes = linea.split(",");
-                if (partes.length == 3 && partes[0].equals(nombre) && partes[1].equals(contraseña)) {
-                    Usuario u = new Usuario(partes[0], partes[1]);
-                    u.sumarPuntos(Integer.parseInt(partes[2]));
-                    return u;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public boolean registrarUsuario(String nombre, String contraseña) {
+        validarDatos(nombre, contraseña);
+        if (usuarioExiste(nombre)) return false;
+        repositorio.guardar(new Usuario(nombre, contraseña));
+        return true;
+    }
+
+    public Usuario login(String nombre, String contraseña) {
+        validarDatos(nombre, contraseña);
+        Usuario usuario = repositorio.buscarPorNombre(nombre);
+        if (usuario != null && usuario.getContraseña().equals(contraseña)) {
+            return usuario;
         }
         return null;
     }
 
-    public static boolean usuarioExiste(String nombre) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(ARCHIVO))) {
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                String[] partes = linea.split(",");
-                if (partes.length >= 1 && partes[0].equals(nombre)) return true;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public boolean usuarioExiste(String nombre) {
+        return repositorio.buscarPorNombre(nombre) != null;
+    }
+
+    private void validarDatos(String nombre, String contraseña) {
+        if (nombre == null || contraseña == null || nombre.isBlank() || contraseña.isBlank()) {
+            throw new IllegalArgumentException("Completa todos los campos.");
         }
-        return false;
+        if (contieneSeparadores(nombre) || contieneSeparadores(contraseña)) {
+            throw new IllegalArgumentException("No uses comas, punto y coma ni saltos de línea.");
+        }
+    }
+
+    private boolean contieneSeparadores(String texto) {
+        return texto.contains(",") || texto.contains(";")
+                || texto.contains("\n") || texto.contains("\r");
     }
 }
-

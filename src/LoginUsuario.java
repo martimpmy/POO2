@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class LoginUsuario extends JFrame {
 
-    public LoginUsuario(PantallaInicio pantallaInicio) {
+    public LoginUsuario(PantallaInicio pantallaInicio, GestorUsuario gestor, java.util.function.Consumer<Usuario> abrirJuego) {
         setTitle("Iniciar Sesión");
         setSize(400, 280);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -87,24 +87,18 @@ public class LoginUsuario extends JFrame {
                 return;
             }
 
-            Usuario usuario = GestorUsuario.login(nombre, contraseña);
-
-            if (usuario != null) {
-
-                JOptionPane.showMessageDialog(
-                    this,
-                    "¡Bienvenido " + usuario.getNombre() + "!"
-                );
-
-                new AhorcadoStitch(usuario);
-                this.dispose();
-
-            } else {
-
-                JOptionPane.showMessageDialog(
-                    this,
-                    "Usuario o contraseña incorrectos."
-                );
+            try {
+                Usuario usuario = gestor.login(nombre, contraseña);
+                if (usuario != null) {
+                    JOptionPane.showMessageDialog(this, "¡Bienvenido " + usuario.getNombre() + "!");
+                    abrirJuego.accept(usuario);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.");
+                }
+            } catch (IllegalArgumentException | AccesoUsuariosException error) {
+                JOptionPane.showMessageDialog(this, error.getMessage(),
+                        "No se pudo iniciar sesión", JOptionPane.ERROR_MESSAGE);
             }
 });
 

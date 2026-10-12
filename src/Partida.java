@@ -1,46 +1,35 @@
-public class Partida {
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
-    private Palabra palabraActual;
+public class Partida {
+    private final Palabra palabraActual;
+    private final int maxErrores;
+    private final Set<Character> letrasIntentadas = new HashSet<>();
     private int errores;
 
-    private final int MAX_ERRORES = 6;
+    public Partida(Palabra palabra) { this(palabra, 6); }
 
-    public Partida(Palabra palabra) {
-        palabraActual = palabra;
-        errores = 0;
+    public Partida(Palabra palabra, int maxErrores) {
+        Objects.requireNonNull(palabra);
+        if (maxErrores <= 0) throw new IllegalArgumentException("El límite debe ser positivo.");
+        // Cada ronda posee una copia, sin el progreso de rondas anteriores.
+        palabraActual = new Palabra(palabra.getPalabra(), palabra.getPista());
+        this.maxErrores = maxErrores;
     }
 
     public void procesarLetra(char letra) {
-
-        if (palabraActual.contieneLetra(letra)) {
-            palabraActual.agregarLetra(letra);
-        } else {
-            errores++;
-        }
+        letra = Character.toUpperCase(letra);
+        if (termino() || !letrasIntentadas.add(letra)) return;
+        if (palabraActual.contieneLetra(letra)) palabraActual.agregarLetra(letra);
+        else errores++;
     }
-
-    public boolean gano() {
-        return palabraActual.estaCompleta();
-    }
-
-    public boolean perdio() {
-        return errores >= MAX_ERRORES;
-    }
-
-    public void cambiarPalabra(Palabra nuevaPalabra) {
-        palabraActual = nuevaPalabra;
-        errores = 0;
-    }
-
-    public Palabra getPalabra() {
-        return palabraActual;
-    }
-
-    public int getErrores() {
-        return errores;
-    }
-
-    public int getMaxErrores() {
-        return MAX_ERRORES;
-    }
+    public boolean gano() { return palabraActual.estaCompleta(); }
+    public boolean perdio() { return errores >= maxErrores; }
+    public boolean termino() { return gano() || perdio(); }
+    public int getErrores() { return errores; }
+    public int getMaxErrores() { return maxErrores; }
+    public String getPista() { return palabraActual.getPista(); }
+    public String getTextoPalabra() { return palabraActual.getPalabra(); }
+    public String mostrarPalabra() { return palabraActual.mostrar(); }
 }
