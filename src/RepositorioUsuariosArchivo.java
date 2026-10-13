@@ -52,7 +52,6 @@ public class RepositorioUsuariosArchivo implements RepositorioUsuarios {
         }
     }
 
-    @Override
     public void guardar(Usuario usuario) {
         Objects.requireNonNull(usuario);
         // Protege el formato incluso si otro cliente usa el repositorio directamente.
